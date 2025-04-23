@@ -1,67 +1,50 @@
-import {
-  Image,
-  Text,
-  View,
-  StyleSheet,
-  FlatList,
-  Dimensions,
-} from "react-native";
+import { View, Text, StyleSheet, TextInput, Pressable, Image } from "react-native";
+import { useState } from "react";
+import { useRouter } from "expo-router";
 
-type DataItem = {
-  imageuri: string;
-  name: string;
-  age: number;
-  city: string;
-};
+export default function LoginPage() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const router = useRouter();
 
-const { width } = Dimensions.get("window");
-
-export default function Home() {
-  const data: DataItem[] = [
-    {
-      imageuri: "https://s.yimg.com/ny/api/res/1.2/jvkzkQLZ51wXmHswNTiktg--/YXBwaWQ9aGlnaGxhbmRlcjt3PTEyMDA7aD04MDA-/https://s.yimg.com/os/creatr-uploaded-images/2021-07/59a4bc60-f23c-11eb-bf75-c38993010fb7",
-      name: "Gunung Fuji",
-      age: 2,
-      city: "Japan",
-    },
-    {
-      imageuri: "https://th.bing.com/th/id/OIP.JPxuwK63goUkpI1v3P-gSAHaE0?rs=1&pid=ImgDetMainng",
-      name: "Candi",
-      age: 3,
-      city: "Indonesia",
-    },
-    {
-      imageuri: "https://th.bing.com/th/id/OIP.wkmZe_tc_un7YHuhOHei0gHaFU?rs=1&pid=ImgDetMain",
-      name: "Liberty",
-      age: 4,
-      city: "Amerika",
-    },
-    {
-      imageuri: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1c/56/59/7d/hustler-casino.jpg?w=500&h=400&s=1",
-      name: "Kasino",
-      age: 27,
-      city: "LA",
-    },
-  ];
-
-  const renderItem = ({ item }: { item: DataItem }) => (
-    <View style={styles.card}>
-      <Image source={{ uri: item.imageuri }} style={styles.image} />
-      <Text style={styles.title}>{item.name}</Text>
-      <Text style={styles.subtitle}>Usia: {item.age} tahun</Text>
-      <Text style={styles.city}>Kota: {item.city}</Text>
-    </View>
-  );
+  const handleLogin = () => {
+    if (username && password) {
+      router.push("/page1");
+    } else {
+      alert("Username dan Password wajib diisi");
+    }
+  };
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={data}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.name}
-        contentContainerStyle={styles.list}
-        showsVerticalScrollIndicator={false}
+      <Image
+        source={{ uri: "https://logos-world.net/wp-content/uploads/2020/09/Google-Symbol.png" }}
+        style={styles.logo}
       />
+      <Text style={styles.title}>Masuk</Text>
+      <Text style={styles.subtitle}>Gunakan akun Google Anda</Text>
+
+      <TextInput
+        style={styles.input}
+        placeholder="Email atau ponsel"
+        value={username}
+        onChangeText={setUsername}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Masukkan password"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+      />
+
+      <Pressable style={styles.forgotButton}>
+        <Text style={styles.forgotText}>Lupa sandi?</Text>
+      </Pressable>
+
+      <Pressable style={styles.loginButton} onPress={handleLogin}>
+        <Text style={styles.loginButtonText}>Berikutnya</Text>
+      </Pressable>
     </View>
   );
 }
@@ -69,47 +52,62 @@ export default function Home() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F0F4F8",
-    paddingTop: 20,
+    backgroundColor: "#fff",
+    paddingHorizontal: 24,
+    paddingTop: 80,
   },
-  list: {
-    paddingHorizontal: 16,
-    paddingBottom: 20,
-  },
-  card: {
-    backgroundColor: "#ffffff",
-    borderRadius: 16,
-    marginBottom: 20,
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 5,
-    overflow: "hidden",
-  },
-  image: {
-    width: width - 32,
-    height: 200,
-    resizeMode: "cover",
+  logo: {
+    width: 50,
+    height: 50,
+    alignSelf: "center",
+    marginBottom: 30,
   },
   title: {
-    fontSize: 20,
-    fontWeight: "700",
-    color: "#1A1A1A",
-    marginTop: 10,
-    marginHorizontal: 12,
+    fontSize: 28,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: 6,
   },
   subtitle: {
-    fontSize: 16,
-    color: "#4CAF50",
-    marginHorizontal: 12,
-    marginTop: 4,
+    fontSize: 14,
+    color: "#555",
+    textAlign: "center",
+    marginBottom: 30,
   },
-  city: {
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 16,
+    backgroundColor: "#f9f9f9",
+  },
+  forgotButton: {
+    alignItems: "flex-end",
+    marginBottom: 30,
+  },
+  forgotText: {
+    color: "#1a73e8",
+    fontSize: 14,
+  },
+  loginButton: {
+    backgroundColor: "#1a73e8",
+    paddingVertical: 12,
+    borderRadius: 6,
+    alignItems: "center",
+  },
+  loginButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
     fontSize: 16,
-    color: "#2196F3",
-    marginHorizontal: 12,
-    marginBottom: 12,
-    marginTop: 2,
+  },
+  createAccount: {
+    marginTop: 40,
+    alignItems: "center",
+  },
+  createText: {
+    fontSize: 14,
+    color: "#1a73e8",
+    fontWeight: "500",
   },
 });
